@@ -15,9 +15,9 @@ const CategoryPage = () => {
 
   useEffect(()=>{
       const getProductsCategory = async () =>{
-        let res = await publicRequest.get(category ? `/products?category=${category}`: 'http://localhost:5000/api/products/' )
+        let res = await publicRequest.get(category ? `/products?category=${category}`: '/products/' )
         if(res.data.length === 0) {
-          res = await publicRequest.get('http://localhost:5000/api/products/');
+          res = await publicRequest.get('/products/');
        }
         setProducts(res.data)
         setLoading(false)
