@@ -14,9 +14,9 @@ const SearchProduct = () => {
 
   useEffect(()=>{
       const getProductsCategory = async () =>{
-        let res = await publicRequest.get(search ? `/products/search?searchQuery=${search}` : 'http://localhost:5000/api/products/')
+        let res = await publicRequest.get(search ? `/products/search?searchQuery=${search}` : '/products/')
         if(res.data.length === 0) {
-          res = await publicRequest.get('http://localhost:5000/api/products/');
+          res = await publicRequest.get('/products/');
        }
         setProducts(res.data)
         setLoading(false)
