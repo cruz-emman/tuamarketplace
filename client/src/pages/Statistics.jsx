@@ -4,7 +4,7 @@ import dayjs from 'dayjs';
 
 import { useEffect } from 'react'
 import { useState } from 'react'
-import { useParams } from 'react-router-dom'
+import { useNavigate, useParams } from 'react-router-dom'
 import Chart from '../components/Chart'
 import Navbar from '../components/Navbar'
 import { userRequest } from '../publicRequest'
@@ -13,11 +13,13 @@ import { useMemo, useRef } from 'react'
 
 
 const Statistics = () => {
+
+    const navigate = useNavigate()
+
     const [grossIncome , setGrossIncome] = useState()
     const [recentTransaction, setRecentTransaction] = useState([])
     const [orderStats, setOrderStats] = useState([])
     const [executing, setExecuting] = useState(false);
-    let btnRef = useRef();
 
 
     const [loading, setLoading] = useState(true)
@@ -47,7 +49,7 @@ const Statistics = () => {
               }
         }   
         getStats()
-    },[id])
+    },[id,setGrossIncome,setRecentTransaction,setOrderStats, MONTHS])
 
     
     useEffect(() =>{
@@ -78,7 +80,7 @@ const Statistics = () => {
             }
         }
         getIncomeStats()
-    },[MONTHS, id])
+    },[id,setGrossIncome,setRecentTransaction,setOrderStats, MONTHS])
 
 
     
@@ -95,12 +97,12 @@ const Statistics = () => {
 
         }   
     getStats()
-    },[id])
+},[id,setGrossIncome,setRecentTransaction,setOrderStats, MONTHS])
 
     const confirmSell = async (e) => {
         try {
             await userRequest.put(`/order/${e}`, {status: 'complete'})
-            window.location.reload();
+            navigate(0);
 
         } catch (error) {
             console.log({error: error.message})
@@ -114,7 +116,7 @@ const Statistics = () => {
         const itemId = product?.productId
         await userRequest.put(`/products/${itemId}`, {status: 'available'})
         await userRequest.delete(`/order/${e}`)
-        window.location.reload();
+        navigate(0);
 
        } catch (error) {
         

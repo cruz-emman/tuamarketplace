@@ -1,18 +1,16 @@
 import "./datatable.scss";
 import { DataGrid } from "@mui/x-data-grid";
 import SearchOutlinedIcon from "@mui/icons-material/SearchOutlined";
-
-import { userColumns, userRows } from "../../datatablesource";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { useState } from "react";
 import { useEffect } from "react";
 import BeatLoader from "react-spinners/BeatLoader";
 import { toast } from "react-toastify";
-import { deleteProduct, deleteUser } from "../../redux/apiCalls";
-
-import { useDispatch, useSelector } from 'react-redux'
+import {  deleteUser } from "../../redux/apiCalls";
+import { useDispatch } from 'react-redux'
 
 const DatatableUser = ({data, columns, id}) => {
+  const navigate = useNavigate()
   const [loading, setLoading] = useState(true)
   const dispatch = useDispatch()
 
@@ -24,8 +22,8 @@ const DatatableUser = ({data, columns, id}) => {
 
   const handleDelete = (id) => {
     deleteUser(id, dispatch)
-     window.location.reload();
-     toast.success("User Deleted")
+    navigate(0);
+    toast.success("User Deleted")
   };
 
   const actionColumn = [

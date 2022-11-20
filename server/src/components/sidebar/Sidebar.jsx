@@ -34,7 +34,7 @@ const Sidebar = () => {
     e.preventDefault();
     dispatch(logOut())
     toast.info("Logout Successfully")
-    window.location.reload()
+    navigate('/login')
   }
 
   return (

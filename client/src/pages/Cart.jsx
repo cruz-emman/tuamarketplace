@@ -89,7 +89,7 @@ const Cart = () => {
 
             dispatch(resetStateCart())
             navigate('/')
-            window.location.reload();
+            
             toast.success("Order Submited!")
 
         } catch (error) {

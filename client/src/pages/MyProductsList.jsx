@@ -44,7 +44,7 @@ const MyProductsList = () => {
     const handleDelete = (id) =>{
         deleteProduct(id, dispatch)
 
-        window.location.reload();
+        navigate(0);
         toast.success("Product Deleted")
     }
 
