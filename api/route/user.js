@@ -39,7 +39,7 @@ router.delete('/:id', verifyTokenAndAuthorization, async (req, res) => {
 })
 
 //GET ALL USERS
-router.get('/', async (req, res) => {
+router.get('/', verifyTokenAndAdmin, async (req, res) => {
     const query = req.query.new;
     try {
         const users = query
@@ -62,6 +62,16 @@ router.get('/find/:id',  async (req,res) => {
         res.status(400).json("Search Failed")
     }
 })
+
+//Search User
+
+router.get('/search', async (req,res) =>{
+    try {
+        
+    } catch (error) {
+        
+    }
+}) 
 
 //GET USER STATS
 

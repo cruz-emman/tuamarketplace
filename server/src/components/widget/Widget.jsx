@@ -97,7 +97,7 @@ const Widget = ({ type }) => {
         title: "USERS",
         isMoney: false,
         link: "See all users",
-        amount: userNumber,
+        amount: userNumber - 1,
 
         icon: (
           <PersonOutlinedIcon

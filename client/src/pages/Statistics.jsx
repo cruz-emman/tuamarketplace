@@ -123,7 +123,6 @@ const Statistics = () => {
        }
     }
 
-
   return (
     <Box>
         <Navbar />

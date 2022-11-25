@@ -34,7 +34,7 @@ app.use('/api/order', orderRouter)
 
 
 
-app.listen(5000, () =>{
+app.listen(5000, '0.0.0.0', () =>{
     dbConnect()
-    console.log(`Connected to Backend on PORT: http://localhost:${5000}`)
+    console.log(`Connected to Backend on PORT: http://localhostlocalhost:${5000}`)
 })

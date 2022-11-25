@@ -76,7 +76,8 @@ export const getUsers = async (dispatch) =>{
   
   try {
     const res = await userRequest.get(`/users`)
-    dispatch(getuserSuccess(res.data))
+    let filterdAdmin =  res.data.filter((admin) => admin.isAdmin === !true)
+    dispatch(getuserSuccess(filterdAdmin))
   } catch (error) {
     dispatch(getuserFailure())
   }

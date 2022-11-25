@@ -1,5 +1,5 @@
 import "./datatable.scss";
-import { DataGrid } from "@mui/x-data-grid";
+import { DataGrid, GridToolbar } from "@mui/x-data-grid";
 import SearchOutlinedIcon from "@mui/icons-material/SearchOutlined";
 import { Link, useNavigate } from "react-router-dom";
 import { useState } from "react";
@@ -9,12 +9,16 @@ import { toast } from "react-toastify";
 import {  deleteUser } from "../../redux/apiCalls";
 import { useDispatch } from 'react-redux'
 
+
+
 const DatatableUser = ({data, columns, id}) => {
   const navigate = useNavigate()
   const [loading, setLoading] = useState(true)
+  const [searchUser, setSearchUser] = useState([])
   const dispatch = useDispatch()
 
-  //const [data, setData] = useState(userRows);
+
+  console.log(searchUser)
 
   useEffect(() => {
     setLoading(false)
@@ -25,6 +29,9 @@ const DatatableUser = ({data, columns, id}) => {
     navigate(0);
     toast.success("User Deleted")
   };
+ 
+
+
 
   const actionColumn = [
     {
@@ -51,10 +58,6 @@ const DatatableUser = ({data, columns, id}) => {
   return (
     <div className="datatable">
       <div className="datatableTitle">
-      <div className="search">
-          <input type="text" placeholder="Search..." />
-          <SearchOutlinedIcon />
-        </div>
       </div>
       {loading ? (
          <BeatLoader 
@@ -73,6 +76,13 @@ const DatatableUser = ({data, columns, id}) => {
         columns={columns.concat(actionColumn)}
         pageSize={9}
         rowsPerPageOptions={[9]}
+        components={{ Toolbar: GridToolbar }}
+        componentsProps={{
+          toolbar: {
+            showQuickFilter: true,
+            quickFilterProps: { debounceMs: 500 },
+          },
+        }}
         checkboxSelection
       />
       )}
