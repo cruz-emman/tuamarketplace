@@ -8,7 +8,7 @@ const ProductList = ({products, category}) => {
   const [loading, setLoading] = useState(true)
 
   useEffect(() =>{
-    const isAvailable = products.filter((product) => product.status === 'available')
+    const isAvailable = products.filter((product) => product.quantity !== 0 )
     setFilteredProducts(isAvailable)
     setLoading(false)
   },[setFilteredProducts, category,products])

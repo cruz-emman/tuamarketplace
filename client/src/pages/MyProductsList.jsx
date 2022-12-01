@@ -30,7 +30,7 @@ const MyProductsList = () => {
         const getCustomerProduct = async () =>{
             const res = await userRequest.get(`/products/customerproduct/${id}`)
             let getFiltered = res.data.filter((item) => (
-                item.status === "available"
+                item.quantity !== 0
               ))
               setFilteredProducts(getFiltered)
             setLoading(false)
@@ -73,6 +73,7 @@ const MyProductsList = () => {
                            <TableRow bgcolor="skyblue">
                               <TableCell align='center'>Product</TableCell>
                               <TableCell align='center'>Image</TableCell>
+                              <TableCell align='center'>QTY</TableCell>
                               <TableCell align='center'>Price</TableCell>
                               <TableCell align='center'>Action</TableCell>
                           </TableRow>
@@ -88,6 +89,7 @@ const MyProductsList = () => {
                                   <TableCell align='center'>
                                   <Box component="img" sx={{width: '80px', height: '80px', borderRadius: '10px', objectFit: 'contain'}} src={product.img}/>
                                   </TableCell>
+                                  <TableCell align='center'> {product.quantity}</TableCell>
                                   <TableCell align='center'>₱ {product.price}</TableCell>
                                   <TableCell align='center'>
                                               <Box sx={{display: 'flex', alignItems:'center', justifyContent: 'center', gap: "10px"}}>                                                                   

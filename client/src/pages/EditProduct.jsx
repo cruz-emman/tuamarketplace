@@ -19,9 +19,7 @@ import {
 
 
 const EditProduct = () => {
-
   const navigate = useNavigate()
-
   const {id} = useParams()
   const [singleProduct,setSingleProduct] = useState()
   const [loading,setLoading] = useState(true)
@@ -31,7 +29,6 @@ const EditProduct = () => {
   useEffect(() => {
     const getSingleProduct = async () =>{
       const res = await publicRequest.get(`/products/find/${id}`)
-      console.log(res.data)
       setSingleProduct(res.data)
       setLoading(false)
 
@@ -40,6 +37,77 @@ const EditProduct = () => {
   },[id])
 
 
+
+  const CAHScategory = [
+    'CAHS Merchandise',
+    'CAHS Related Softwares',
+    'Clinical Equipments',
+    'Others',
+  ]
+  const CASEcategory = [
+    'CASE Merchandise',
+    'CASE Related Softwares',
+    'Laboratory Equipments',
+    'Others',
+  ]
+
+  const CBMAcategory = [
+    'CBMA Merchandise',
+    'CBMA Related Softwares',
+    'Business and Accountancy Equipments',
+    'Others',
+  ]
+
+  const CEIScategory = [
+    'CEIS Merchandise',
+    'CEIS Related Softwares',
+    'IT Tools/Equipment',
+    'Others',
+  ]
+
+  const CHTMcategory =[
+    'CHTM Merchandise',
+    'CHTM Related Softwares',
+    'Hospitality and Tourism Equipments',
+    'Others',
+  ]
+
+  const CMTcategory = [
+    'CMT Merchandise',
+    'CMT Related Softwares',
+    'Medical Technology Equipments',
+    'Others',
+  ]
+  
+  const SLCNcategory = [
+    'SLCN Merchandise',
+    'SLCN Related Softwares',
+    'Nursing Equipments',
+    'Others',
+  ]
+
+   let Itemtype = null
+   if(itemName.category === 'CAHS'){
+    Itemtype = CAHScategory
+   }
+   else if(itemName.category === 'CASE'){
+    Itemtype = CASEcategory
+   }
+   else if(itemName.category === 'CBMA'){
+    Itemtype = CBMAcategory
+   }
+   else if(itemName.category === 'CMT'){
+    Itemtype = CMTcategory
+   }
+   else if(itemName.category === 'CEIS'){
+    Itemtype = CEIScategory
+   }
+   else if(itemName.category === 'CHTM'){
+    Itemtype = CHTMcategory
+   }
+   else if(itemName.category === 'SLCN'){
+    Itemtype = SLCNcategory
+   }
 
   const [imgUrl, setImgUrl] = useState(null);
   const [progresspercent, setProgresspercent] = useState(0);
@@ -109,14 +177,23 @@ const EditProduct = () => {
                     <TextField name="price" label="Price" type="Number" variant="outlined" placeholder={`₱ ${singleProduct.price}`} fullWidth 
                       onChange={(e) => setItemName({...itemName, [e.target.name]: e.target.value})} 
                     />  
+
+                  <TextField variant="outlined" label="Quantity" 
+                    onChange={(e) => setItemName({...itemName, quantity: e.target.value > 5 ? e.target.value = 5 : e.target.value})} 
+                    fullWidth name="quantity"
+                      
+                      placeholder='Maximum limit of 5'  
+                      InputProps={{ inputProps: { min: 0, max: 5, maxLength: 1}}}
+                      pattern="^-?[0-5]\d*\.?\d*$"
+                      />
                     <FormControl fullWidth>
                             <InputLabel id="demo-simple-select-label">Course</InputLabel>
                               <Select
                                 name="category"
                                 labelId="demo-simple-select-label"
-                                defaultValue={singleProduct.category}
                                 id="demo-simple-select"
                                 label="Category"
+                                defaultValue=""
                                 onChange={(e) => setItemName({...itemName, [e.target.name]: e.target.value})} 
                               >
                                 <MenuItem value="CAHS">College of Allied Health and Sciences</MenuItem>
@@ -128,14 +205,31 @@ const EditProduct = () => {
                                 <MenuItem value="SLCN">St. Lukes College of Nursing</MenuItem>
                               </Select>
                             
-                          </FormControl>
+                      </FormControl>
+
+                      <FormControl fullWidth>  
+                          <InputLabel id="demo-simple-select-label">Product Category</InputLabel>
+                        <Select
+                          fullWidth
+                          labelId="demo-simple-select-label"
+                          id="demo-simple-select"
+                          name="productCategory"
+                          defaultValue=""
+                          label="productCategory"
+                          onChange={(e) => setItemName({...itemName, productCategory: e.target.value})}
+                        >         
+                          {Itemtype ? (
+                            Itemtype.map((el) => <MenuItem value={el} key={el}>{el}</MenuItem>)
+                          ): <MenuItem>Choose Department</MenuItem>}
+                        </Select>
+                        </FormControl>
                       <TextField label="Description Name"
                        onChange={(e) => setItemName({...itemName, [e.target.name]: e.target.value})} 
                        name="description" multiline row={4} variant="outlined" placeholder={singleProduct.description} fullWidth />
                       <Box>
                         <form stlye={{display: 'flex', flexDireciton: 'column'}} onSubmit={handleUpload} className='form'>
                           <input type='file' />
-                          <Button type='submit' component="label" endIcon={<PhotoCamera />} color="secondary" size='small' variant="contained">Upload</Button>
+                          <Button type='submit'  endIcon={<PhotoCamera />} color="secondary" size='small' variant="contained">Upload</Button>
                         </form>
                         {
                           !imgUrl &&
@@ -150,7 +244,8 @@ const EditProduct = () => {
                   <Grid item sx={{marginLeft: {xs: 0, md: 2}}} md={6} xs={12}>
                     <Typography variant="h6" sx={{fontWeight: 700, paddingY: 2}} color="gray"> Preview </Typography>
                       <Box sx={{display: 'flex', alingItems:'center', justifyContent: {xs: 'center', md: 'space-between'},  marginX: 'auto', gap: '10px', flexDirection: {xs: 'column', md:'row'}}}>
-                        <Box component="img"  src={imgUrl ? URL.createObjectURL(imgUrl) :  singleProduct.img} sx={{height:{xs: 150, md: 400}, width: {xs: 150, md: 400}, paddding: 2, borderRadius: "15px", boxShadow: 1}} />
+                            <Box component="img" src={imgUrl ? URL.createObjectURL(imgUrl): singleProduct.img } sx={{height:'100%', width: '100%', objectFit: 'contain',borderRadius: '16px'}}  />
+                   
                         <Box sx={{display: 'flex',  flexDirection: 'column', width:"100%", gap: {xs: '10px', md: '20px'}}}>
                         <TextField 
                                 id="outlined-multiline-static"
@@ -176,11 +271,33 @@ const EditProduct = () => {
                               />
                         <TextField 
                                 id="outlined-multiline-static"
+                                label="Quantity"
+                                multiline
+                                fullWidth
+                                variant="outlined"
+                                value={itemName.quantity || singleProduct.quantity}
+                                InputProps={{
+                                  readOnly: true,
+                                }}
+                              />
+                        <TextField 
+                                id="outlined-multiline-static"
                                 label="Course"
                                 multiline
                                 fullWidth
                                 variant="outlined"
                                 value={itemName.category || singleProduct.category}
+                                InputProps={{
+                                  readOnly: true,
+                                }}
+                              />
+                        <TextField 
+                                id="outlined-multiline-static"
+                                label="Course"
+                                multiline
+                                fullWidth
+                                variant="outlined"
+                                value={itemName.productCategory || singleProduct.productCategory}
                                 InputProps={{
                                   readOnly: true,
                                 }}

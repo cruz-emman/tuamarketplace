@@ -15,7 +15,7 @@ const ProductItem = ({product}) => {
   }
 
   return (
-      <Card sx={{ width: {xs: 100, md: 250}, flexGrow: 1 }} onClick={(e) => handleClick(product._id)}>
+      <Card sx={{ width: {xs: 100, md: 250}, flexGrow: 1, boxShadow: 3 }} onClick={(e) => handleClick(product._id)}>
           <CardActionArea>
             <CardMedia
               component="img"

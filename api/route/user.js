@@ -39,7 +39,7 @@ router.delete('/:id', verifyTokenAndAuthorization, async (req, res) => {
 })
 
 //GET ALL USERS
-router.get('/', verifyTokenAndAdmin, async (req, res) => {
+router.get('/', async (req, res) => {
     const query = req.query.new;
     try {
         const users = query

@@ -40,7 +40,6 @@ export const updateUser = async (id, user, dispatch) =>{
   try {
     const res = await userRequest.put(`/users/${id}`, user)
     dispatch(updateSuccess(res.data))
-    dispatch(resetState())
   } catch (error) {
     dispatch(updateFailure())
   }

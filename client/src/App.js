@@ -20,6 +20,8 @@ import Anonymous from './components/Anonymous'
 import 'react-toastify/dist/ReactToastify.css'
 import Protected from "./components/Protected";
 import EditProfile from "./pages/EditProfile";
+import SpentDashboard from "./pages/SpentDashboard";
+import SellerPage from "./pages/SellerPage";
 
 
 function App() {
@@ -37,6 +39,8 @@ function App() {
                   {/* Info seller */}
           <Route path="/myproducts/:id" element={<MyProductsList />}  />
           <Route path="/statistics/:id" element={<Statistics />} />
+          <Route path="/spentdashboard/:id" element={<SpentDashboard />} />
+          <Route path="/sellerProfile/:id" element={<SellerPage />} />
                   {/*  Personal Information */}
             <Route path="/edituser/:id" element={<EditProfile />} />
         </Route>

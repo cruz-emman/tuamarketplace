@@ -14,10 +14,10 @@ import BeatLoader from "react-spinners/BeatLoader";
 
 const Widget = ({ type }) => {
   const dispatch = useDispatch()
-  const [userNumber, setUserNumber] = useState()
-  const [userProduct, setUserProduct] = useState()
-  const [userOrder, setUserOrder] = useState()
-  const [total, setTotal] = useState()
+  const [userNumber, setUserNumber] = useState(0)
+  const [userProduct, setUserProduct] = useState(0)
+  const [userOrder, setUserOrder] = useState(0)
+  const [total, setTotal] = useState(0)
   const [loading, setLoading] = useState(true)
 
   let data;
@@ -97,7 +97,7 @@ const Widget = ({ type }) => {
         title: "USERS",
         isMoney: false,
         link: "See all users",
-        amount: userNumber - 1,
+        amount: !userNumber ? 0 : userNumber - 1 ,
 
         icon: (
           <PersonOutlinedIcon
@@ -114,7 +114,7 @@ const Widget = ({ type }) => {
       data = {
         title: "Products",
         isMoney: false,
-        amount: userProduct,
+        amount: !userProduct ? 0 : userProduct,
         link: "View all products",
         icon: (
           <ShoppingCartOutlinedIcon
@@ -131,7 +131,7 @@ const Widget = ({ type }) => {
       data = {
         title: "Order",
         isMoney: false,
-        amount: userOrder,
+        amount: userOrder || 0,
 
         link: "View net order",
         icon: (
@@ -146,7 +146,7 @@ const Widget = ({ type }) => {
       data = {
         title: "Over All Amount",
         isMoney: true,
-        amount: total,
+        amount: !total ? 0: total ,
         link: "See details",
         icon: (
           <AccountBalanceWalletOutlinedIcon

@@ -1,4 +1,5 @@
 import { Box, Button, Container, Grid, IconButton, TextField, Typography } from '@mui/material'
+import RemoveCircleOutlineIcon from '@mui/icons-material/RemoveCircleOutline';
 import React, {useState} from 'react'
 import item from '../assets/item.png'
 import BeatLoader from "react-spinners/BeatLoader";
@@ -6,17 +7,26 @@ import { addProduct } from '../redux/cartSlice';
 import { useDispatch, useSelector } from 'react-redux';
 import AddCircleIcon from '@mui/icons-material/AddCircle';
 import RemoveCircleIcon from '@mui/icons-material/RemoveCircle';
+import { Link } from 'react-router-dom';
 
 const SingleProduct = ({singleProduct, quantity, setQuantity}) => {
     const cart = useSelector((state) => state.cart.products)
     const cartAddedAlready = cart[0]?._id
 
+    console.log(singleProduct)
 
     const dispatch = useDispatch()
     const handleClick = () =>{
         dispatch(addProduct({...singleProduct, quantity }) )
     }
 
+    const handleQuantity = (type) => {
+        if (type === "dec") {
+          quantity > 1 && setQuantity(quantity - 1);
+        } else if(type ==="inc") {
+          quantity < singleProduct.quantity && setQuantity(quantity + 1);
+        }
+      };
 
   return (
     <Box sx={{ height: '100%', width: '100%', marginTop: {xs: 2, md: 10}}}>
@@ -40,38 +50,25 @@ const SingleProduct = ({singleProduct, quantity, setQuantity}) => {
                         <Typography variant="body1" fontWeight={600} color="#757575">Seller: </Typography>
                         <Typography variant="body1" fontWeight={600} color="#757575">StudentID: </Typography>
                         <Typography variant="body1" fontWeight={600} color="#757575">Dept: </Typography>
+                        <Typography variant="body1" fontWeight={600} color="#757575">Qty: </Typography>
                         <Typography variant="body1" fontWeight={600} color="#757575">Desc: </Typography>
                     </Grid>
                     <Grid item xs={8} >
-                        <Typography variant="body1" fontWeight={700} color="#212121">{singleProduct.seller_id?.firstname} {singleProduct.seller_id?.lastname}</Typography>
+                        <Typography variant="body1" fontWeight={700} color="#212121">{singleProduct.seller_id?.firstname} {singleProduct.seller_id?.lastname} </Typography>
                         <Typography variant="body1" fontWeight={700} color="#212121">{singleProduct.seller_id?.studentId}</Typography>
                         <Typography variant="body1" fontWeight={700} color="#212121">{singleProduct.seller_id?.department}</Typography>
+                        <Typography variant="body1" fontWeight={700} color="#212121">{(singleProduct.quantity - quantity)}</Typography>
                         <Typography variant="body1" fontWeight={700} color="#212121"
                          sx={{overflowWrap: 'break-word', width: {xs: 150, md: '100%'}}}>{singleProduct.description}</Typography>
+                        <Button component={Link} to={`/sellerProfile/${singleProduct.seller_id?._id}`} sx={{marginTop: 2}} variant="contained" size="small">View Seller</Button>
 
-                            
                         </Grid>
-{/* 
-                    <Box mt={4} sx={{display: 'flex',alignItems:"center", justifyContent:'space-between', width: 200}}>
-                    <Box sx={{display: 'flex', width: '100%', justifyContent: 'space-evenly', fontSize: "20px"}}>
-                        <IconButton onClick={() => handleQuantity("dec")}>
-                        <RemoveCircleIcon />
 
-                        </IconButton>
-                        <IconButton onClick={() => handleQuantity("inc")}>
-                        <AddCircleIcon />
 
-                        </IconButton>
-                    </Box>
 
-                        <Box sx={{border: 1, padding: 2, borderRadius: '10px'}}>
-                            <Typography>1</Typography>
-                        </Box>
-
-                    </Box> */}
                 </Grid>
-
                 <Box py={4}>
+                    
                    {cartAddedAlready ? (
                       <Button
                         color="error"
@@ -82,7 +79,16 @@ const SingleProduct = ({singleProduct, quantity, setQuantity}) => {
                       One Purchase only
                   </Button>
                    ) :   
-                   (
+                   (<Box sx={{display: 'flex', justifyContent: 'space-evenly'}}>
+                      <Box sx={{display: 'flex', alignItems:'center', justifyContent:'center', gap: 2}} >
+                            <IconButton onClick={() => handleQuantity('dec')} >
+                                <RemoveCircleIcon fontSize="large"  color="error" />
+                            </IconButton>
+                                   <Typography variant='h6' component="div" sx={{width: 50, height: 50 , borderRadius: '50%', display: 'flex', alignItems:'center', justifyContent: 'center'}} fontWeight={400}> {quantity}</Typography>
+                            <IconButton  onClick={() => handleQuantity('inc')} >
+                                <AddCircleIcon fontSize="large"  color="success" />
+                            </IconButton>
+                        </Box>
                     <Button
                         sx={{
                             borderRadius: 10,
@@ -95,6 +101,7 @@ const SingleProduct = ({singleProduct, quantity, setQuantity}) => {
                         >
                         BUY NOW
                     </Button>
+                    </Box>
                    ) 
                    }
                  

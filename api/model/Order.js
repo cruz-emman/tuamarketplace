@@ -20,7 +20,8 @@ const OrderSchema = new mongoose.Schema({
     location:{type: Object, required:true},
     time: {type: String, required: true},
     status: {type:String, default: "pending"},
-    tax: {type: Number,}
+    tax: {type: Number,},
+    boughtItem: {type: Number, default: 0},
 
 }, {timestamps: true}
 )

@@ -71,6 +71,7 @@ const DatatableUser = ({data, columns, id}) => {
       ): (
         <DataGrid
         className="datagrid"
+        {...data}
         rows={loading ? [] : data}
         getRowId={(row) => row._id}
         columns={columns.concat(actionColumn)}

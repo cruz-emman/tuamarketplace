@@ -10,6 +10,8 @@ import BeatLoader from "react-spinners/BeatLoader";
 import { resetState } from '../redux/authSlice';
 import { toast } from 'react-toastify';
 import {  updateUser } from '../redux/apiCalls';
+import PhotoCamera from '@mui/icons-material/PhotoCamera';
+import {storage} from '../firebase'
 import app from '../firebase'
 import {
   getDownloadURL,
@@ -31,16 +33,11 @@ const EditProfile = () => {
   const [userProfile, setUserProfile] = useState()
   const [loading,setLoading] = useState(true)
   const [file, setFile] = useState(null)
+  const [itemName, setItemName] = useState()
+
   
   const {register, handleSubmit, watch , reset, formState: {errors}} = useForm({
-    firtname: '',
-    middlename: '',
-    lastname: '',
-    email: '',
-    department: '',
-    img: '',
-    password: '',
-    studentId: '',
+
   })
 
   useEffect(() =>{
@@ -66,51 +63,56 @@ const EditProfile = () => {
     if(isError){
       toast.error("Student ID or Email Already Existing")
     }
-  },[dispatch,isError])
+  },[dispatch,isError, setUserProfile, setItemName])
+
+  useEffect(() =>{
+    if(isUpdated){
+      toast.success("Re-Login again!")
+      dispatch(resetState())
+      navigate('/login')
+    }
+  },[dispatch,isUpdated, setUserProfile, setItemName])
+
 
   
-  const onSubmit =  async ({firstname, middlename, lastname, email, password, studentId, department,img}) => {
-    let user = {firstname, middlename, lastname, email, password, studentId, department,img}
-    const fileName = new Date().getTime() + file
-    const storage = getStorage(app)
-    const storageRef = ref(storage, fileName)
-    const uploadTask = uploadBytesResumable(storageRef, file)
+  const onSubmit =  async ({firstname, middlename, lastname, email, password, studentId, department}) => {
+    let user = {firstname, middlename, lastname, email, password, studentId, department}
+    let userImage = itemName?.img
 
+    const userend = {...user, img: userImage}
+    updateUser(id,userend,dispatch)
 
-    uploadTask.on(
-      'state_changed',
+  }
+
+  const [imgUrl, setImgUrl] = useState(null);
+  const [progresspercent, setProgresspercent] = useState(0);
+
+  const handleUpload = (e) => {
+    e.preventDefault()
+    const file = e.target[0]?.files[0]
+    if (!file) return;
+    const storageRef = ref(storage, `files/${file.name}`);
+    const uploadTask = uploadBytesResumable(storageRef, file);
+
+    uploadTask.on("state_changed",
       (snapshot) => {
-        // Observe state change events such as progress, pause, and resume
-        // Get task progress, including the number of bytes uploaded and the total number of bytes to be uploaded
-        const progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100
-        console.log('Upload is ' + progress + '% done')
-        switch (snapshot.state) {
-          case 'paused':
-            console.log('Upload is paused')
-            break
-          case 'running':
-            console.log('Upload is running')
-            break
-          default:
-        }
+        const progress =
+          Math.round((snapshot.bytesTransferred / snapshot.totalBytes) * 100);
+        setProgresspercent(progress);
       },
       (error) => {
-        // Handle unsuccessful uploads
+        alert(error);
       },
       () => {
-        // Handle successful uploads on complete
-        // For instance, get the download URL: https://firebasestorage.googleapis.com/...
         getDownloadURL(uploadTask.snapshot.ref).then((downloadURL) => {
-          const userend = { ...user, img: downloadURL ||  userProfile.img}
-          updateUser(id,userend,dispatch)
+          setItemName({...itemName, img: downloadURL})
+          setImgUrl(downloadURL)
           
-        })
+        });
       }
-    )
-    toast.success("Please Re-Login!")
-    dispatch(resetState())
-    navigate('/login')
+    );
   }
+
 
   return (
     <Box>
@@ -236,18 +238,21 @@ const EditProfile = () => {
 
 
                   <Grid item xs={12} md={6}>
-                    <Box sx={{display:'flex', gap:"20px",flexDirection: 'column', justifyContent: 'center', alignItems:'center'}}>
-                        <Box component="img" src={file ? URL.createObjectURL(file) : userProfile.img || 'https://icon-library.com/images/no-image-icon/no-image-icon-0.jpg' } 
-                                sx={{height:'200px', width: '200px',  objectFit: 'cover', borderRadius: '50%', display: 'flex', alignItems:'center', justifyContent:'center'}}  />
-                        <Button variant="contained" size="small" component="label">
-                            Upload File
-                            <input 
-                                onChange={(e) => setFile(e.target.files[0])}
-                                type="file"
-                                id="file"
-                                hidden
-                            />
-                          </Button>
+                  <Box sx={{display: 'flex', alingItems:'center', justifyContent: {xs: 'center', md: 'space-between'},  marginX: 'auto', gap: '10px', width: '50%',flexDirection: {xs: 'column', md:'row'}}}>
+
+                  <Box component="img" src={imgUrl ?imgUrl: userProfile.img } sx={{height:'100%', width: '100%', objectFit: 'contain',borderRadius: '16px'}}  />                          </Box>
+
+                    <Box sx={{marginTop: 5}}>
+                        <form stlye={{display: 'flex', flexDireciton: 'column'}} onSubmit={handleUpload} className='form'>
+                          <input type='file' />
+                          <Button type='submit'  endIcon={<PhotoCamera />} color="secondary" size='small' variant="contained">Upload</Button>
+                        </form>
+                        {
+                          !imgUrl &&
+                          <Box>
+                            <Box sx={{ width: `${progresspercent}%` }}>{progresspercent}%</Box>
+                          </Box>
+                        }
                       </Box>
                   </Grid>
           </Grid>

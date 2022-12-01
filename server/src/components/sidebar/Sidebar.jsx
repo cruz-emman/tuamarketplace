@@ -33,6 +33,7 @@ const Sidebar = () => {
   const onLogout = async (e) => {
     e.preventDefault();
     dispatch(logOut())
+    window.location.reload()
     toast.info("Logout Successfully")
     navigate('/login')
   }

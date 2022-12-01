@@ -1,5 +1,5 @@
 import { Box, Button, Container, FormControl, Grid, InputLabel, MenuItem, Select, Stack, TextField, Typography } from '@mui/material'
-import React, {useState} from 'react'
+import React, {useEffect, useState} from 'react'
 import { useLocation, useNavigate } from 'react-router-dom'
 import Navbar from '../components/Navbar'
 import app from '../firebase'
@@ -14,6 +14,10 @@ import { addProduct } from '../redux/apiCalls'
 import { useDispatch, useSelector } from 'react-redux'
 import { toast } from 'react-toastify'
 import BeatLoader from "react-spinners/BeatLoader";
+import PhotoCamera from '@mui/icons-material/PhotoCamera';
+import {storage} from '../firebase'
+
+
 
 const AddProduct = () => {
 
@@ -24,64 +28,129 @@ const AddProduct = () => {
   const navigate = useNavigate()
   const dispatch = useDispatch()
 
-  const [file, setFile] = useState(null)
-
   const [itemName, setItemName] = useState({
     seller_id: currentUser._id,
     title: '',
     description: '',
     category: '',
-    price: ''
+    productCategory: '',
+    price: '',
+    quantity: ''
   })
 
+
+  const CAHScategory = [
+    'CAHS Merchandise',
+    'CAHS Related Softwares',
+    'Clinical Equipments',
+    'Others',
+  ]
+  const CASEcategory = [
+    'CASE Merchandise',
+    'CASE Related Softwares',
+    'Laboratory Equipments',
+    'Others',
+  ]
+
+  const CBMAcategory = [
+    'CBMA Merchandise',
+    'CBMA Related Softwares',
+    'Business and Accountancy Equipments',
+    'Others',
+  ]
+
+  const CEIScategory = [
+    'CEIS Merchandise',
+    'CEIS Related Softwares',
+    'IT Tools/Equipment',
+    'Others',
+  ]
+
+  const CHTMcategory =[
+    'CHTM Merchandise',
+    'CHTM Related Softwares',
+    'Hospitality and Tourism Equipments',
+    'Others',
+  ]
+
+  const CMTcategory = [
+    'CMT Merchandise',
+    'CMT Related Softwares',
+    'Medical Technology Equipments',
+    'Others',
+  ]
   
-  const handleClick = (e) =>{
+  const SLCNcategory = [
+    'SLCN Merchandise',
+    'SLCN Related Softwares',
+    'Nursing Equipments',
+    'Others',
+  ]
 
-    e.preventDefault();
-    const fileName = new Date().getTime() + file
-    const storage = getStorage(app)
-    const storageRef = ref(storage, fileName)
-    const uploadTask = uploadBytesResumable(storageRef, file)
-
-    try {
-      uploadTask.on(
-        'state_changed',
-        (snapshot) => {
-          // Observe state change events such as progress, pause, and resume
-          // Get task progress, including the number of bytes uploaded and the total number of bytes to be uploaded
-          const progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100
-          console.log('Upload is ' + progress + '% done')
-          switch (snapshot.state) {
-            case 'paused':
-              console.log('Upload is paused')
-              break
-            case 'running':
-              console.log('Upload is running')
-              break
-            default:
-          }
-        },
-        (error) => {
-          // Handle unsuccessful uploads
-        },
-        () => {
-          // Handle successful uploads on complete
-          // For instance, get the download URL: https://firebasestorage.googleapis.com/...
-          getDownloadURL(uploadTask.snapshot.ref).then((downloadURL) => {
-            const product = { ...itemName, img: downloadURL }
-             addProduct(product, dispatch)
-            toast.success("Added New Product")
-             navigate('/')
-          })
-        }
-      )
-    } catch (error) {
-      console.log({error: error.message})
-    }
-
+   let Itemtype = null
+   if(itemName.category === 'CAHS'){
+    Itemtype = CAHScategory
+   }
+   else if(itemName.category === 'CASE'){
+    Itemtype = CASEcategory
+   }
+   else if(itemName.category === 'CBMA'){
+    Itemtype = CBMAcategory
+   }
+   else if(itemName.category === 'CMT'){
+    Itemtype = CMTcategory
+   }
+   else if(itemName.category === 'CEIS'){
+    Itemtype = CEIScategory
+   }
+   else if(itemName.category === 'CHTM'){
+    Itemtype = CHTMcategory
+   }
+   else if(itemName.category === 'SLCN'){
+    Itemtype = SLCNcategory
+   }
+  
    
+  const handleClick = async (e) =>{
+    e.preventDefault()
+    
+    try {
+      addProduct(itemName, dispatch)
+      toast.success("Added New Product")
+       navigate('/')
+    } catch (err) {
+      console.log({err:err.message})
+    }
   }
 
+  const [imgUrl, setImgUrl] = useState(null);
+  const [progresspercent, setProgresspercent] = useState(0);
+
+
+    const handleSubmit = (e) => {
+    e.preventDefault()
+    const file = e.target[0]?.files[0]
+    if (!file) return;
+    const storageRef = ref(storage, `files/${file.name}`);
+    const uploadTask = uploadBytesResumable(storageRef, file);
+
+    uploadTask.on("state_changed",
+      (snapshot) => {
+        const progress =
+          Math.round((snapshot.bytesTransferred / snapshot.totalBytes) * 100);
+        setProgresspercent(progress);
+      },
+      (error) => {
+        alert(error);
+      },
+      () => {
+        getDownloadURL(uploadTask.snapshot.ref).then((downloadURL) => {
+          setItemName({...itemName, img: downloadURL})
+          setImgUrl(downloadURL)
+        });
+      }
+    );
+  }
 
 
   return (
@@ -115,8 +184,15 @@ const AddProduct = () => {
                 <TextField variant="outlined" required label="Price" type="number" 
                       onChange={(e) => setItemName({...itemName, price: e.target.value })}
                       fullWidth name="price" />
+                <TextField variant="outlined" label="Quantity" 
+                    onChange={(e) => setItemName({...itemName, quantity: e.target.value > 5 ? e.target.value = 5 : e.target.value})} 
+                    fullWidth name="quantity"
+                    placeholder='Maximum limit of 5'  
+
+                    pattern="^-?[0-5]\d*\.?\d*$"
+                    />
                 <FormControl fullWidth>  
-                  <InputLabel id="demo-simple-select-label">Category</InputLabel>
+                  <InputLabel id="demo-simple-select-label">Department</InputLabel>
                 <Select
                   fullWidth
                   labelId="demo-simple-select-label"
@@ -135,18 +211,41 @@ const AddProduct = () => {
                     
                 </Select>
                 </FormControl>
+                <FormControl fullWidth>  
+                  <InputLabel id="demo-simple-select-label">Product Category</InputLabel>
+                <Select
+                  fullWidth
+                  labelId="demo-simple-select-label"
+                  id="demo-simple-select"
+                  name="productCategory"
+                  defaultValue=""
+                  label="productCategory"
+                  onChange={(e) => setItemName({...itemName, productCategory: e.target.value})}
+                  required
+                >         
+                   {Itemtype ? (
+                    Itemtype.map((el) => <MenuItem value={el} key={el}>{el}</MenuItem>)
+                   ): null}
+                </Select>
+                </FormControl>
                 <TextField variant="outlined" label="Description" 
                     onChange={(e) => setItemName({...itemName, description: e.target.value})} 
                     fullWidth name="description" rows={4} multiline />
-                <Button variant="contained" component="label">
-                  Upload File
-                  <input 
-                    type="file"
-                    id="file"
-                    onChange={(e) => setFile(e.target.files[0])}
-                    hidden
-                  />
-                </Button>
+
+
+          <div className="App">
+                <form onSubmit={handleSubmit} className='form'>
+                  <input type='file' />
+                  <Button variant='contained' endIcon={<PhotoCamera />}  size="small" type='submit'>Upload</Button>
+                </form>
+                {
+                  !imgUrl &&
+                  <div className='outerbar'>
+                    <div className='innerbar' style={{ width: `${progresspercent}%` }}>{progresspercent}%</div>
+                  </div>
+                }
+            
+              </div>
             </Stack>
                   </Grid>
                   <Grid item xs={12} md={6}>
@@ -160,8 +259,11 @@ const AddProduct = () => {
                               Preview
                             </Typography>
                             <Box sx={{display:'flex', width: '100%', justifyContent: 'space-between', flexDirection: {xs: 'column', md: 'row'}}}>
-                              <Box sx={{width: {xs: 150, md: '300'} }}>
-                                <Box component="img" src={file ? URL.createObjectURL(file) :'https://icon-library.com/images/no-image-icon/no-image-icon-0.jpg'} sx={{height:'100%', width: '100%', objectFit: 'contain',borderRadius: '16px'}}  />
+                              <Box sx={{width: {xs: 150, md: "50%"} }}>
+                                  {imgUrl  && 
+                                   <Box component="img" src={imgUrl} sx={{height:'100%', width: '100%', objectFit: 'contain',borderRadius: '16px'}}   />
+                                  }
+                    
                               </Box>
                               <Box sx={{display: 'flex', flexDirection: 'column', height: '100%', gap: '20px'}}>
                                 <TextField 
@@ -190,6 +292,27 @@ const AddProduct = () => {
                                     multiline
                                     variant="outlined"
                                     value = { itemName.category || ""}
+                                    InputProps={{
+                                      readOnly: true,
+                                    }}
+                                  />
+                                <TextField 
+                                    id="outlined-multiline-static"
+                                    label="Product Category"
+                                    multiline
+                                    variant="outlined"
+                                    value = { itemName.productCategory || ""}
+                                    InputProps={{
+                                      readOnly: true,
+                                    }}
+                                  />
+                                <TextField 
+                                    id="outlined-multiline-static"
+                                    label="Quantity"
+                                    multiline
+                                    type="number"
+                                    variant="outlined"
+                                    value = { itemName.quantity || ""}
                                     InputProps={{
                                       readOnly: true,
                                     }}

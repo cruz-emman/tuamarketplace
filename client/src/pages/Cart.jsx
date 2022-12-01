@@ -23,7 +23,11 @@ const Cart = () => {
     const currentUser = useSelector((state) => state.auth.currentUser)
     const cart = useSelector((state) => state.cart)
     const [getProductId, setGetProductId] = useState("")
+    const [productQuantity, setProductQuantity] = useState()
     const [loading, setLoading] = useState(true)
+    const soldItem = cart?.products[0]?.quantity
+
+
 
     // console.log(cart.products[0]._id)
     const dispatch = useDispatch()
@@ -34,20 +38,25 @@ const Cart = () => {
         dispatch(deleteProduct({id,quantity: cart.quantity, price: itemPrice}))
     } 
 
+
+
     useEffect(() => {
-      
-        try {
-            const getProductId = () => {
-                setGetProductId(cart.products[0]?._id)
-                setLoading(false)
+
+            const getIdofProduct = async () => {
+                try {
+                    setGetProductId(cart.products[0]?._id)      
+                    const res = await userRequest.get(`/products/find/${cart.products[0]?._id}`)
+                    setProductQuantity(res.data.quantity)
+                    setLoading(false)
+                } catch (error) {
+                    console.log({error: error.messsage})
+                }
+                
             }
-            getProductId()
+            getIdofProduct()
 
-        } catch (error) {
-            
-        }
+   
     },[dispatch, cart, currentUser])
-
 
 
     const [orderSummary, setOrderSummary] = useState({
@@ -66,6 +75,8 @@ const Cart = () => {
 
 
     const handleSubmit = async (e) =>{
+        const totalSell = productQuantity - soldItem
+        console.log(totalSell)
         e.preventDefault()
         //const getSellerId = cart.products.map((item) => console.log(item.user_id.studentId))
         try {
@@ -80,15 +91,17 @@ const Cart = () => {
                 amount: cart.total,
                 time: value,
                 location: orderSummary.location,
-                tax: (cart.total * 0.01).toFixed(2)
+                tax: (cart.total * 0.01).toFixed(2),
+                boughtItem: soldItem
             }) 
 
         await userRequest.put(`/products/${getProductId}`, {
-            status: 'delivered'
+            quantity: (productQuantity - soldItem)
+            
         })
 
             dispatch(resetStateCart())
-            navigate('/')
+             navigate('/')
             
             toast.success("Order Submited!")
 

@@ -3,20 +3,7 @@ import mongoose from 'mongoose';
 import Order from '../model/Order.js'
 import sgMail from '@sendgrid/mail'
 const router = express.Router()
-import {verifyToken, verifyTokenAndAdmin, verifyTokenAndAuthorization} from './verifyToken.js'
-import nodemailer from 'nodemailer'
-const API_KEY = "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"
 
-sgMail.setApiKey(API_KEY)
-
-let transporter = nodemailer.createTransport({
-  host: 'smtp.sendgrid.net',
-  port: 587,
-  auth: {
-    user: 'apikey',
-    pass: ""
-  }
-})
 
 router.post("/", async (req, res) => {
     const newOrder = new Order(req.body);
@@ -83,7 +70,7 @@ router.post("/", async (req, res) => {
       const orders = await Order.find().populate(
         [
           {path: 'userId', select: 'studentId'},
-          {path: 'products.productId', select: 'title img status'},
+          {path: 'products.productId', select: 'title img status category productCategory'},
           {path: 'products.sellerId', select: 'studentId'}
         ]).exec();
       res.status(200).json(orders);
@@ -224,8 +211,30 @@ router.post("/", async (req, res) => {
       res.status(500).json({err: err.message});
     }
   });
+  
+  //GET GROSS INCOME
+  router.get("/totalbuy/:id", async (req, res) => {
+    const { id } = req.params;
+    const buyerId = mongoose.Types.ObjectId(id)
+  
+    try {
+      const income = await Order.aggregate([ 
+      {
+        $match: {userId: buyerId, status: "complete"}
+      },
+      {$group: {_id: "$buyerId", total: {$sum: "$amount"}}}
+      
+
+      ])
+      res.status(200).json(income);
+    } catch (err) {
+      res.status(500).json({err: err.message});
+    }
+  });
 
 
+
+//GET RECENT CATEGORY
   router.get('/recent/:id', async (req,res) => {
     const { id } = req.params;
 
@@ -233,7 +242,30 @@ router.post("/", async (req, res) => {
       const orders = await Order.find({'products.sellerId': id }).sort({createdAt: -1})
                     .populate([
                       {path: 'userId', select: 'firstname lastname studentId' },
-                      {path: 'products.productId', select: 'title img status' }
+                      {path: 'products.productId', select: 'title img status quantity' },
+                      {path: 'products.sellerId', select: 'firstname lastname studentId department' }
+                    ]).exec()
+                                    
+      res.status(200).json(orders);     
+    }
+       catch (error) {
+      res.status(500).json({message: error.message});
+      console.log({message: error.message});
+    }
+
+  })
+
+
+//GET RECENT BUYER
+  router.get('/recentBuy/:id', async (req,res) => {
+    const { id } = req.params;
+
+    try {
+      const orders = await Order.find({userId: id }).sort({createdAt: -1})
+                    .populate([
+                      {path: 'userId', select: 'firstname lastname studentId' },
+                      {path: 'products.productId', select: 'title img status quantity' },
+                      {path: 'products.sellerId', select: 'firstname lastname studentId department' }
                     ]).exec()
                                     
       res.status(200).json(orders);     

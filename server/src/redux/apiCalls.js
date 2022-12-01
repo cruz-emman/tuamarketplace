@@ -20,7 +20,7 @@ export const registerUser = async (user, dispatch) => {
   export const loginUser = async (user, dispatch) => {
     dispatch(loginStart());
     try {
-      const res = await publicRequest.post("/auth/login", user);
+      const res = await userRequest.post("/auth/login", user);
       dispatch(loginSuccess(res.data));
     } catch (err) {
       dispatch(loginFailure());

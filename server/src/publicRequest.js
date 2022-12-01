@@ -1,6 +1,7 @@
 import axios from "axios";
 
 //const BASE_URL = "http://191.96.57.97/api/";
+//const BASE_URL = "http://192.168.137.1:5000/api/"; redmi
 const BASE_URL = "http://localhost:5000/api/";
 
   const user = JSON.parse(localStorage.getItem("persist:root"))?.auth;
