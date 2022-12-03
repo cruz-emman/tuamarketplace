@@ -24,7 +24,7 @@ const ListProducts = ({columns}) => {
       const getAllProducts = async () => {
         const res = await userRequest.get('/products')
             let getFiltered = res.data.filter((item) => (
-              item.status === "available"
+              item.quantity !== 0
             ))
             setFilteredProducts(getFiltered)
             setLoading(false)

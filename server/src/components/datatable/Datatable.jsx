@@ -1,5 +1,5 @@
 import "./datatable.scss";
-import { DataGrid } from "@mui/x-data-grid";
+import { DataGrid, GridToolbar } from "@mui/x-data-grid";
 import SearchOutlinedIcon from "@mui/icons-material/SearchOutlined";
 
 import { userColumns, userRows } from "../../datatablesource";
@@ -64,11 +64,20 @@ const Datatable = ({data, columns, id}) => {
       ): (
         <DataGrid
         className="datagrid"
+        {...data}
+
         rows={loading ? {} : data}
         getRowId={(row) => row._id}
         columns={columns}
         pageSize={9}
         rowsPerPageOptions={[9]}
+        components={{ Toolbar: GridToolbar }}
+        componentsProps={{
+          toolbar: {
+            showQuickFilter: true,
+            quickFilterProps: { debounceMs: 500 },
+          },
+        }}
         checkboxSelection
       />
       )}

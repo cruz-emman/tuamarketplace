@@ -65,14 +65,14 @@ const SellerPage = () => {
               justifyContent="center">
             <Grid item xs={12} md={6}>
               <Box sx={{padding: 4, height: 200, width:'100%'}}>
-                <Box src={sellerInfo.img} sx={{display: 'flex', alignItems:'center', justifyContent: 'center',height: '100%', width: '100%', objectFit: 'contain', borderRadius: '50%'}} component="img" />
+                <Box src={sellerInfo?.img} sx={{display: 'flex', alignItems:'center', justifyContent: 'center',height: '100%', width: '100%', objectFit: 'contain', borderRadius: '50%'}} component="img" />
               </Box>          
             </Grid>
             <Grid item xs={12} md={6}>
               <Box sx={{dispay: 'flex'}}>
-                <Typography variant="h5" sx={{fontWeight: 700}}>{sellerInfo.firstname} {sellerInfo.lastname}</Typography>
-                <Typography variant="h6" color="text.secondary">{sellerInfo.studentId} </Typography>
-                <Typography variant="h6" color="text.secondary">{sellerInfo.department} </Typography>
+                <Typography variant="h5" sx={{fontWeight: 700}}>{sellerInfo?.firstname} {sellerInfo?.lastname}</Typography>
+                <Typography variant="h6" color="text.secondary">{sellerInfo?.studentId} </Typography>
+                <Typography variant="h6" color="text.secondary">{sellerInfo?.department} </Typography>
               </Box>
             </Grid>
           </Grid>
@@ -81,7 +81,7 @@ const SellerPage = () => {
 
         <Box sx={{display: 'flex', alignItems:'center', flexDirection: 'column',marginTop: 5}}>
          <Paper sx={{padding: 4}} elevation={4}>
-          <Typography variant="h3"sx={{textTransform: 'uppercase'}} color="text.secondary">{sellerInfo.firstname}'s products</Typography>
+          <Typography variant="h3"sx={{textTransform: 'uppercase'}} color="text.secondary">{sellerInfo?.firstname}'s products</Typography>
          </Paper>
 
          <Box  sx={{display: 'flex', alignItems:'center',justifyContent: 'space-evenly', flexWrap: 'wrap', gap: '10px', marginTop: 2}}>

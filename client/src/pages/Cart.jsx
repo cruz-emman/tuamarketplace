@@ -56,7 +56,7 @@ const Cart = () => {
             getIdofProduct()
 
    
-    },[dispatch, cart, currentUser])
+    },[dispatch, cart, currentUser,setProductQuantity, soldItem])
 
 
     const [orderSummary, setOrderSummary] = useState({
@@ -75,8 +75,6 @@ const Cart = () => {
 
 
     const handleSubmit = async (e) =>{
-        const totalSell = productQuantity - soldItem
-        console.log(totalSell)
         e.preventDefault()
         //const getSellerId = cart.products.map((item) => console.log(item.user_id.studentId))
         try {
@@ -114,7 +112,7 @@ const Cart = () => {
     <Box>
         <Navbar />
         <Container maxWidth="xl">
-          {loading ? (
+          {loading  ? (
           <BeatLoader 
           color="#36d7b7" 
           loading={loading}

@@ -88,6 +88,21 @@ const Sidebar = () => {
           </Link>
 
 
+          <p className="title">CHARTS</p>
+          <Link to="/department" style={{ textDecoration: "none" }}>
+          <li>
+            <PsychologyOutlinedIcon className="icon" />
+            <span>Department</span>
+          </li>
+          </Link>
+          <Link to="/category" style={{ textDecoration: "none" }}>
+          <li>
+            <InsertChartIcon className="icon" />
+            <span>Merchendise</span>
+          </li>
+          </Link>
+          
+          <p className="title">ACCOUNT</p>
           <li onClick={onLogout}>
             <ExitToAppIcon className="icon" />
             <span>Logout</span>

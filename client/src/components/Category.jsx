@@ -21,13 +21,14 @@ import  CMT from '../assets/logos/CMT.jpg'
 const Category = () => {
   const theme = useTheme();
 
-  const [topProduct,setTopProduct] = useState()
-  const [topProductImage,setTopProductImage] = useState()
+  const [topDepartment,setTopDepartment] = useState()
+  const [topDepartmentImage,setTopDepartmentImage] = useState()
 
   const [topProductCategory,setTopProductCategory] = useState()
   const [topProductCategoryImage,setTopProductCategoryImage] = useState()
 
   
+
   const [loading,setLoading] = useState(true)
 
 
@@ -35,48 +36,74 @@ const Category = () => {
     const getTotalDepartments = async () =>{
       try {
         const res = await publicRequest.get(`/order/`)
-        res.data.map((list) => {
+        res.data.map((list) => {          
           list.products.map((product) =>{
-            setTopProduct(product.productId.category)
-            setTopProductCategory(product.productId.productCategory)
             setTopProductCategoryImage(product.productId.img)
-            if(product.productId.category === "CEIS"){
-              setTopProductImage(CEIS)
-            }
-            else if(product.productId.category === "CASE"){
-              setTopProductImage(CASE)
-            }
-            else if(product.productId.category === "CBMA"){
-              setTopProductImage(CBMA)
-            }
-            else if(product.productId.category === "CHTM"){
-              setTopProductImage(CHTM)
-            }
-            else if(product.productId.category === "CMT"){
-              setTopProductImage(CMT)
-            }
-            else if(product.productId.category === "SLCN"){
-              setTopProductImage(SLCN)
-            }
-            else if(product.productId.category === "CAHS"){
-              setTopProductImage(CAHS)
-            }
           })
         })
-        setLoading(false)
 
+
+        setLoading(false)
       } catch (error) {
         
       }
     }
     getTotalDepartments()
-  },[setTopProduct,setTopProductImage])
-  
-  useEffect(() =>{
-      
-      setLoading(false)
+},[setTopDepartment,setTopDepartmentImage, setTopProductCategory, setTopProductCategoryImage])
 
-  },[setTopProduct,setTopProductImage])
+
+  useEffect(() =>{
+   
+    const getTopDepartment = async () =>{ 
+      try {
+        const res = await publicRequest.get(`/order/departments`)
+        const topDept = res.data[0]?.category
+        setTopDepartment(topDept)
+
+            if(topDept === "CEIS"){
+              setTopDepartmentImage(CEIS)
+            }
+            else if(topDept === "CASE"){
+              setTopDepartmentImage(CASE)
+            }
+            else if(topDept === "CBMA"){
+              setTopDepartmentImage(CBMA)
+            }
+            else if(topDept === "CHTM"){
+              setTopDepartmentImage(CHTM)
+            }
+            else if(topDept === "CMT"){
+              setTopDepartmentImage(CMT)
+            }
+            else if(topDept === "SLCN"){
+              setTopDepartmentImage(SLCN)
+            }
+            else if(topDept === "CAHS"){
+              setTopDepartmentImage(CAHS)
+            }
+        setLoading(false)
+      } catch (error) {
+        
+      }
+    }
+    getTopDepartment()
+
+  },[setTopDepartment,setTopDepartmentImage, setTopProductCategory, setTopProductCategoryImage])
+
+
+  useEffect(() =>{
+
+    const getTopProductCategory = async ()  => {
+      const res = await publicRequest.get(`/order/topCategory`)
+      const topDept = res.data[0]
+      const getName = topDept?._id.toString()
+      setTopProductCategory(getName)
+      setLoading(false)
+    } 
+    getTopProductCategory()
+
+  },[setTopDepartment,setTopDepartmentImage, setTopProductCategory, setTopProductCategoryImage])
+
 
   return (
     <>
@@ -96,7 +123,7 @@ const Category = () => {
             <Box sx={{ display: 'flex', flexDirection: 'column' }}>
               <CardContent sx={{ flex: '1 0 auto' }}>
                 <Typography component="div" sx={{typography: {xs: 'h5', md: 'h3'}}}>
-                  {topProduct}
+                  {topDepartment}
                 </Typography>
                 <Typography sx={{typography: {xs: 'caption', md: 'subtitle1'}}} color="text.secondary" component="div">
                   Most Active Department
@@ -105,8 +132,8 @@ const Category = () => {
             </Box>
             <CardMedia
               component="img"
-              sx={{ width: {xs: 80, md: 151} }}
-              image={topProductImage}
+              sx={{ width: {xs: 80, md: 151}, borderRadius: '50%' }}
+              image={topDepartmentImage}
             />          
           </Card>
 
@@ -114,10 +141,10 @@ const Category = () => {
             <Box sx={{ display: 'flex', flexDirection: 'column' }}>
               <CardContent sx={{ flex: '1 0 auto' }}>
               <Typography component="div" sx={{typography: {xs: 'h5', md: 'h3'}}}>
-                  {topProductCategory}
+                {topProductCategory}
                 </Typography>
                 <Typography sx={{typography: {xs: 'caption', md: 'subtitle1'}}} color="text.secondary" component="div">
-                  Most Sold Product By Category
+                  Trend products by category
                 </Typography>
               </CardContent>
             </Box>

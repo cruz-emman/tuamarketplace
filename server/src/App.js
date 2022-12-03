@@ -14,6 +14,8 @@ import 'react-toastify/dist/ReactToastify.css'
 import Protected from './Protected'
 import Anonymous from "./pages/Anonymous";
 import { useSelector } from "react-redux";
+import Department from "./pages/dept/Department";
+import Category from "./pages/cat/Category";
 
 
 function App() {
@@ -58,6 +60,14 @@ function App() {
                     element={<New inputs={productInputs} title="Edit order" />}
                   />
                 </Route>
+
+                <Route path="department">
+                  <Route index element={<Department />} />
+                </Route>
+                <Route path="category">
+                  <Route index element={<Category />} />
+                </Route>
+
             </Route>
           </Route>
 

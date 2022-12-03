@@ -29,8 +29,9 @@ const MyProductsList = () => {
       try {
         const getCustomerProduct = async () =>{
             const res = await userRequest.get(`/products/customerproduct/${id}`)
+            console.log(res.data)
             let getFiltered = res.data.filter((item) => (
-                item.quantity !== 0
+                item.quantity !== 0 || item.isDeleted === true
               ))
               setFilteredProducts(getFiltered)
             setLoading(false)

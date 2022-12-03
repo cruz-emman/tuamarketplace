@@ -10,11 +10,16 @@ import { useDispatch, useSelector } from "react-redux";
 import { getOrder } from "../../redux/apiCalls";
 import BeatLoader from "react-spinners/BeatLoader";
 import { publicRequest } from "../../publicRequest";
-import Chart from "../../components/chart/Chart";
+import BarChartComponent from "../../components/bar/BarChartComponent";
 
-const Home = () => {
+const Category = () => {
   const dispatch = useDispatch()
   const {isFetching, orders} = useSelector((state) => state.order)
+
+  const [barColor, setBarColor] = useState([])
+  const [topDepartment,setTopDepartment] = useState([])
+  const [loading,setLoading] = useState(true)
+
   const [orderStats, setOrderStats] = useState([])
 
   const MONTHS = useMemo(
@@ -23,22 +28,20 @@ const Home = () => {
     ],[]
 )
 
-  useEffect(() => {
-    const getChart = async () =>{
-      const res = await publicRequest.get(`/order/income`);
-      console.log(res.data)
-      const list = res.data.sort((a,b)=>{
-        return a._id - b._id
-      })
-      list.map((item) =>
-      setOrderStats((prev) => [
-        ...prev,
-        { name: MONTHS[item._id - 1], "Total Sales": item.total },
-      ])
-    );
+  useEffect(() =>{
+   
+    const getTopDepartment = async () =>{ 
+      try {
+        let res = await publicRequest.get(`/order/categories`)
+        setTopDepartment(res.data)
+        setLoading(false)
+      } catch (error) {
+        
+      }
     }
-    getChart()
-  },[MONTHS])
+    getTopDepartment()
+
+  },[setTopDepartment])
 
 
   useEffect(() => {
@@ -68,17 +71,10 @@ const Home = () => {
           <Widget type="earning" />
           <Widget type="balance" />
         </div>
-        <div className="charts">
-          <Chart data={orderStats} 
-          grid
-          dataKey="Total Sales"
-          title="Last 12 Months (Revenue)"
-           aspect={3 / 1} />
+          <div className="charts">
+          <BarChartComponent data={topDepartment} title="Categories/Merchendise" barColor={barColor}  />
         </div>
-        <div className="listContainer">
-          <div className="listTitle">Latest Transactions</div>
-          <Table orders={orders} />
-        </div>
+
       </div>
     </div>
         )}
@@ -86,4 +82,4 @@ const Home = () => {
   );
 };
 
-export default Home;
+export default Category;

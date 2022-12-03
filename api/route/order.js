@@ -276,4 +276,171 @@ router.post("/", async (req, res) => {
     }
 
   })
+
+
+
+  //TOP DEPARTMENT AND CATEGORY
+  router.get('/topDepartment', async (req, res) => {
+    
+    try {
+      const order = await Order.aggregate([
+        {
+          $lookup: {
+            from: 'products',
+            localField: 'products.productId',
+            foreignField: '_id',
+            as: 'product'
+          }
+        },
+        {
+            $group: {
+                _id: "$product.category",
+                total: {$sum: 1}
+              }
+        },
+        {
+          $sort: {'total': -1}
+        }
+        
+
+      ])
+      res.status(200).json(order);     
+
+    } catch (error) {
+      res.status(500).json({error: error.message})
+    }
+  })
+
+// ALL DEPARTMENT
+
+router.get('/departments', async (req, res) => {
+    
+  try {
+    const order = await Order.aggregate([
+      {
+        $lookup: {
+          from: 'products',
+          localField: 'products.productId',
+          foreignField: '_id',
+          as: 'product'
+        }
+      },
+      {
+        $unwind: "$product"
+      },
+      {
+        $group: {
+          _id: "$product.category",
+          total: {
+            $sum: 1
+          }
+        }
+      },
+      {
+        $sort: {total: -1}
+      },
+      {
+        $project: {
+          _id: 0,
+          category: "$_id",
+          total: 1
+        }
+      },
+
+    ])
+    res.status(200).json(order);     
+
+  } catch (error) {
+    res.status(500).json({error: error.message})
+  }
+})
+
+//All merch
+router.get('/categories', async (req, res) => {
+    
+  try {
+    const order = await Order.aggregate([
+      {
+        $lookup: {
+          from: 'products',
+          localField: 'products.productId',
+          foreignField: '_id',
+          as: 'product'
+        }
+      },
+      {
+        $unwind: "$product"
+      },
+      {
+        $group: {
+          _id: "$product.productCategory",
+          total: {
+            $sum: 1
+          }
+        }
+      },
+      {
+        $sort: {total: -1}
+      },
+      {
+        $project: {
+          _id: 0,
+          category: "$_id",
+          total: 1
+        }
+      },
+
+    ])
+    res.status(200).json(order);     
+
+  } catch (error) {
+    res.status(500).json({error: error.message})
+  }
+})
+
+
+  //TOP MERCH
+  router.get('/topCategory', async (req, res) => {
+    
+    try {
+      const order = await Order.aggregate([
+        {
+          $lookup: {
+            from: 'products',
+            localField: 'products.productId',
+            foreignField: '_id',
+            as: 'product'
+          }
+        },
+        {
+            $group: {
+                _id: "$product.productCategory",
+                total: {$sum: 1}
+              }
+        },
+        {
+          $sort: {'total': -1}
+        }
+        
+
+      ])
+      res.status(200).json(order);     
+
+    } catch (error) {
+      res.status(500).json({error: error.message})
+    }
+  })
+
+
   export default router
+  
+  // from: 'products',
+  // localField: 'products.productId',
+  // foreignField: '_id',
+  // as: 'product'
+  // {
+  //   $group: {
+  //       _id: "$product.category",
+  //       total: {$sum: 1}
+  //     }
+  //   }

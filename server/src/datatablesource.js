@@ -139,7 +139,8 @@ export const productColumn = [
         </div>
       )
     },
-  },  {
+  },  
+  {
     field: 'title',
     headerName: 'Item',
     width: 250,
@@ -155,6 +156,12 @@ export const productColumn = [
 
   {
     field: 'price',
+    headerName: 'Price',
+    width: 230,
+    
+  },
+  {
+    field: 'quantity',
     headerName: 'Price',
     width: 230,
     
