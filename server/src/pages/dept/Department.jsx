@@ -34,7 +34,6 @@ const Department = () => {
       try {
         let res = await publicRequest.get(`/order/departments`)
         setTopDepartment(res.data)
-        
 
 
         setLoading(false)

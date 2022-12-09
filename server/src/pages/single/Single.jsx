@@ -128,6 +128,10 @@ useEffect(() =>{
                   <span className="itemValue">{users.department}</span>
                 </div>
                 <div className="detailItem">
+                  <span className="itemKey">Contact No.:</span>
+                  <span className="itemValue">{users.contactNumber}</span>
+                </div>
+                <div className="detailItem">
                   <span className="itemKey">Status:</span>
                   <span className="itemValue">{users.status}</span>
 
@@ -136,7 +140,7 @@ useEffect(() =>{
             </div>
           </div>
           <div className="right">
-            <Chart data={orderStats}           dataKey="Total Sales"
+            <Chart data={orderStats}    dataKey="Total Sales"
       grid aspect={3 / 1} title="User Spending ( Last 12 Months)" />
           </div>
         </div>

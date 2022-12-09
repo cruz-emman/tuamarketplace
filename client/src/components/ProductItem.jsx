@@ -31,7 +31,7 @@ const ProductItem = ({product}) => {
                     ₱ {product.price}
                   </Typography>
                   <Typography sx={{fontSize: '12px', fontWeight:'light'}}  color="text.secondary">
-                   {product.seller_id?.department} || {product.seller_id?.studentId}
+                   {product.seller_id?.department || product?.category }  {product.seller_id?.studentId}
                   </Typography>
               </Box>
             <CardContent>

@@ -23,7 +23,7 @@ const CategoryPage = () => {
         setLoading(false)
       }
       getProductsCategory()
-  },[setProducts,category, setLoading])
+  },[setProducts,category])
 
   
   return (

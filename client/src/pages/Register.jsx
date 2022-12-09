@@ -14,6 +14,7 @@ import { resetState } from '../redux/authSlice'
 const USER_REGEX = /^[A-z][A-z0-9-_]{3,23}$/;
 const PWD_REGEX = /^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#$%]).{8,24}$/;
 const ID_REGEX = /^[0-9]{10}$/;
+const CONTACT_REGEX = /^(09|\+639)\d{9}$/;
 
 const Register = () => {
   const {isError, isSuccess} = useSelector((state) =>  state.auth)
@@ -45,12 +46,13 @@ const Register = () => {
     email: '',
     department: '',
     password: '',
+    contactNumber: '',
     studentId: ''
   })
     
 
-  const onSubmit =  ({firstname, middlename, lastname, email, password, studentId, department}) => {
-    let user = {firstname, middlename, lastname, email, password, studentId, department}
+  const onSubmit =  ({firstname, middlename, lastname, email, password, studentId, department,contactNumber}) => {
+    let user = {firstname, middlename, lastname, email, password, studentId, department, contactNumber}
     registerUser(user,dispatch)
     
   }
@@ -149,19 +151,18 @@ const Register = () => {
                                 <MenuItem value="SLCN">St. Lukes College of Nursing</MenuItem>
                               </Select>
                           </FormControl>
-                        {/* <TextField   
+                          <TextField   
                             variant="outlined"
-                            name="Deparment"
-                            label="Deparment"
+                            name="Contact Number"
+                            label="Contact Number"
                             required
                             fullWidth
                             type="text"
-                            autoComplete='password'
-                            autoFocus
-                            // {...register('password', {required: "Required", pattern: {value: PWD_REGEX,  message: "Password should be 8-24 characters and include at least 1 letter, 1 number and 1 special character!" }})}
-                            // error={!!errors?.password}
-                            // helperText={errors?.password ? errors.password.message: null}
-                        /> */}
+                            autoComplete='contact'
+                            {...register('contactNumber', {required: "Required", pattern: {value: CONTACT_REGEX,  message: "Please Enter your contact Number" }})}
+                            error={!!errors?.contactNumber}
+                            helperText={errors?.contactNumber ? errors.contactNumber.message: null}
+                        />
                         <TextField   
                             variant="outlined"
                             name="password"

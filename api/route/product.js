@@ -69,7 +69,7 @@ router.post("/", async (req, res) => {
   router.get("/find/:id", async (req, res) => {
     try {
       const product = await Product.findById(req.params.id)
-                            .populate([{path: 'seller_id', select: 'firstname lastname studentId department'}])
+                            .populate([{path: 'seller_id', select: 'firstname lastname studentId department contactNumber'}])
                             .exec();
       res.status(200).json(product);
     } catch (err) {
@@ -99,18 +99,18 @@ router.post("/", async (req, res) => {
   
       if (qNew) {
         products = await Product.find().sort({ createdAt: -1 }).limit(1)
-                                        .populate([{path: 'seller_id', select: 'firstname lastname studentId department img'}])
+                                        .populate([{path: 'seller_id', select: 'firstname lastname studentId department img contactNumber'}])
                                         .exec();
       } else if (qCategory) {
         products = await Product.find({
           category: {
             $in: [qCategory],
           },
-        }).sort({createdAt: -1}).populate([{path: 'seller_id', select: 'firstname lastname studentId department img'}])
+        }).sort({createdAt: -1}).populate([{path: 'seller_id', select: 'firstname lastname studentId department img contactNumber'}])
         .exec();;
       } else {
         products = await Product.find()
-                                .populate([{path: 'seller_id', select: 'firstname lastname studentId department img'}])
+                                .populate([{path: 'seller_id', select: 'firstname lastname studentId department img contactNumber'}])
                                 .exec();
       }
   
@@ -118,6 +118,30 @@ router.post("/", async (req, res) => {
     } catch (err) {
       res.status(500).json(err);
     }
+  });
+
+
+  router.get("/page", async (req, res) => {
+
+    const page = req.query.p || 0
+    const booksPerPage = 5
+
+    try {
+        
+      const product = await Product
+                                  .find()
+                                  .sort({createdAt: -1})
+                                  .skip(page * booksPerPage)
+                                  .limit(booksPerPage)
+                                  .populate([{path: 'seller_id', select: 'firstname lastname studentId department img'}])
+                                  .exec();
+      
+      res.status(200).json(product)
+    } catch (error) {
+      res.status(500).json(err);
+
+    }
+    
   });
 
   export default router

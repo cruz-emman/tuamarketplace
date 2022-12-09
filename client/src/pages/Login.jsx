@@ -97,11 +97,10 @@ const Login = () => {
 
                       </form>
 
-                      <Box mt={5} sx={{width: '100%', display: 'flex', alignItems: 'center', justifyContent: 'center'}}>
+                      <Box mt={5} sx={{width: '100%', display: 'flex', alignItems: 'center', justifyContent: 'center', flexDirection: 'column'}}>
                         <Typography variant="body2">Not a user yet?</Typography>
                         <Link to="/register">
-                        <Button  variant="text">Register Here</Button>
-
+                          <Button  variant="text">Register Here</Button>
                         </Link>
                       </Box>
               </Box>

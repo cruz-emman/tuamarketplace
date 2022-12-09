@@ -10,6 +10,7 @@ import { useSelector, useDispatch } from "react-redux"
 import { getUsers } from "../../redux/apiCalls"
 import DatatableUser from "../../components/datatable for user/DatatableUser"
 
+
 const List = ({columns}) => {
   const {users, isFetching} = useSelector((state) => state.user)
   const [loading, setLoading] = useState(true)

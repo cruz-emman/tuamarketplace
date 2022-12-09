@@ -24,7 +24,7 @@ const MyProductsList = () => {
     const handleClick=() =>{
         navigate(`/addproduct`)
     }
-
+  
     useEffect(() =>{
       try {
         const getCustomerProduct = async () =>{

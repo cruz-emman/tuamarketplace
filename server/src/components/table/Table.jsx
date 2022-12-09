@@ -31,8 +31,8 @@ const List = ({orders}) => {
               <TableCell className="tableCell">{row._id}</TableCell>
               <TableCell className="tableCell">
                 {row.products.map((product) => (
-                  <div key={product._id} className="cellWrapper">
-                  {product.sellerId.studentId}
+                  <div key={product?._id} className="cellWrapper">
+                  {product.sellerId?.studentId}
                 </div>
                 ))}
               </TableCell>

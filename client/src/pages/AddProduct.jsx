@@ -112,6 +112,7 @@ const AddProduct = () => {
   
    
   const handleClick = async (e) =>{
+    
     e.preventDefault()
     
     try {
@@ -180,16 +181,18 @@ const AddProduct = () => {
             >
                 <TextField variant="outlined" required label="Title"
                   onChange={(e) => setItemName({...itemName, title: e.target.value })}
-                  fullWidth name="title" />
+                  fullWidth name="title" 
+                    />
                 <TextField variant="outlined" required label="Price" type="number" 
                       onChange={(e) => setItemName({...itemName, price: e.target.value })}
                       fullWidth name="price" />
                 <TextField variant="outlined" label="Quantity" 
                     onChange={(e) => setItemName({...itemName, quantity: e.target.value > 5 ? e.target.value = 5 : e.target.value})} 
                     fullWidth name="quantity"
+                    type="number"
                     placeholder='Maximum limit of 5'  
-
-                    pattern="^-?[0-5]\d*\.?\d*$"
+                    required
+                    pattern="^-?[0-9]\d*\.?\d*$"
                     />
                 <FormControl fullWidth>  
                   <InputLabel id="demo-simple-select-label">Department</InputLabel>
@@ -199,9 +202,11 @@ const AddProduct = () => {
                   id="demo-simple-select"
                   name="categories"
                   defaultValue=""
+                  required
+
                   label="categories"
                   onChange={(e) => setItemName({...itemName, category: e.target.value})}
-                  required
+                  
                 >
                     {itemTables.map((item) =>(
                       <MenuItem key={item.id} value={item.cat}>
@@ -218,10 +223,12 @@ const AddProduct = () => {
                   labelId="demo-simple-select-label"
                   id="demo-simple-select"
                   name="productCategory"
+                  required
+
                   defaultValue=""
                   label="productCategory"
                   onChange={(e) => setItemName({...itemName, productCategory: e.target.value})}
-                  required
+                  
                 >         
                    {Itemtype ? (
                     Itemtype.map((el) => <MenuItem value={el} key={el}>{el}</MenuItem>)
@@ -230,12 +237,15 @@ const AddProduct = () => {
                 </FormControl>
                 <TextField variant="outlined" label="Description" 
                     onChange={(e) => setItemName({...itemName, description: e.target.value})} 
-                    fullWidth name="description" rows={4} multiline />
+                    fullWidth name="description" rows={4} multiline
+                    required
+
+                    />
 
 
           <div className="App">
                 <form onSubmit={handleSubmit} className='form'>
-                  <input type='file' />
+                  <input type='file' multiple />
                   <Button variant='contained' endIcon={<PhotoCamera />}  size="small" type='submit'>Upload</Button>
                 </form>
                 {

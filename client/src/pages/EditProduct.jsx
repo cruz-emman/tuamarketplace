@@ -244,7 +244,7 @@ const EditProduct = () => {
                   <Grid item sx={{marginLeft: {xs: 0, md: 2}}} md={6} xs={12}>
                     <Typography variant="h6" sx={{fontWeight: 700, paddingY: 2}} color="gray"> Preview </Typography>
                       <Box sx={{display: 'flex', alingItems:'center', justifyContent: {xs: 'center', md: 'space-between'},  marginX: 'auto', gap: '10px', flexDirection: {xs: 'column', md:'row'}}}>
-                            <Box component="img" src={imgUrl ? URL.createObjectURL(imgUrl): singleProduct.img } sx={{height:'100%', width: '100%', objectFit: 'contain',borderRadius: '16px'}}  />
+                            <Box component="img" src={imgUrl ? URL.createObjectURL(imgUrl): singleProduct.img } sx={{height:'50%', width: '50%', objectFit: 'contain',borderRadius: '16px'}}  />
                    
                         <Box sx={{display: 'flex',  flexDirection: 'column', width:"100%", gap: {xs: '10px', md: '20px'}}}>
                         <TextField 

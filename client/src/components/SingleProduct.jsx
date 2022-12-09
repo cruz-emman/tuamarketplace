@@ -13,7 +13,7 @@ const SingleProduct = ({singleProduct, quantity, setQuantity}) => {
     const cart = useSelector((state) => state.cart.products)
     const cartAddedAlready = cart[0]?._id
 
-    console.log(singleProduct)
+
 
     const dispatch = useDispatch()
     const handleClick = () =>{
@@ -51,6 +51,7 @@ const SingleProduct = ({singleProduct, quantity, setQuantity}) => {
                         <Typography variant="body1" fontWeight={600} color="#757575">StudentID: </Typography>
                         <Typography variant="body1" fontWeight={600} color="#757575">Dept: </Typography>
                         <Typography variant="body1" fontWeight={600} color="#757575">Qty: </Typography>
+                        <Typography variant="body1" fontWeight={600} color="#757575">Contact No.: </Typography>
                         <Typography variant="body1" fontWeight={600} color="#757575">Desc: </Typography>
                     </Grid>
                     <Grid item xs={8} >
@@ -58,6 +59,8 @@ const SingleProduct = ({singleProduct, quantity, setQuantity}) => {
                         <Typography variant="body1" fontWeight={700} color="#212121">{singleProduct.seller_id?.studentId}</Typography>
                         <Typography variant="body1" fontWeight={700} color="#212121">{singleProduct.seller_id?.department}</Typography>
                         <Typography variant="body1" fontWeight={700} color="#212121">{(singleProduct.quantity - quantity)}</Typography>
+                        <Typography variant="body1" fontWeight={700} color="#212121">{singleProduct.seller_id?.contactNumber}</Typography>
+
                         <Typography variant="body1" fontWeight={700} color="#212121"
                          sx={{overflowWrap: 'break-word', width: {xs: 150, md: '100%'}}}>{singleProduct.description}</Typography>
                         <Button component={Link} to={`/sellerProfile/${singleProduct.seller_id?._id}`} sx={{marginTop: 2}} variant="contained" size="small">View Seller</Button>

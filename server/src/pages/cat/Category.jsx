@@ -33,6 +33,8 @@ const Category = () => {
     const getTopDepartment = async () =>{ 
       try {
         let res = await publicRequest.get(`/order/categories`)
+        console.log(res.data)
+
         setTopDepartment(res.data)
         setLoading(false)
       } catch (error) {

@@ -1,4 +1,5 @@
 import dayjs from 'dayjs';
+import avatarImage from './assets/avatar.png'
 
 export const userColumns = [
   { field: "studentId", headerName: "ID", width: 120 },
@@ -8,10 +9,9 @@ export const userColumns = [
     width: 230,
     renderCell: (params) => {
 
-      const isAdminFilter = () => {}
       return (
         <div className="cellWithImg">
-          <img className="cellImg" src={params.row?.img} alt="avatar" />
+          <img className="cellImg" src={params.row?.img || avatarImage} alt="avatar" />
           {params.row?.firstname} {params.row?.lastname}
         </div>
       );
@@ -158,11 +158,19 @@ export const productColumn = [
     field: 'price',
     headerName: 'Price',
     width: 230,
+    renderCell: (params) => {  
+      console.log(params)
+      return (
+        <div className="cellWithImg">
+          ₱ {params.row?.price}
+        </div>
+      )
+    },
     
   },
   {
     field: 'quantity',
-    headerName: 'Price',
+    headerName: 'Quantity',
     width: 230,
     
   },
@@ -193,6 +201,18 @@ export const orderColumn = [
       return (
         <div className="cellWithImg">
            ₱ {params?.row?.amount}
+        </div>
+      )
+    },
+  },
+  {
+    field: "quantity",
+    headerName:"Qty" ,
+    width: 100,
+    renderCell: (params) => {
+      return (
+        <div className="cellWithImg">
+           {params?.row?.boughtItem}
         </div>
       )
     },

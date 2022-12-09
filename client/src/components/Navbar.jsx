@@ -7,16 +7,12 @@ import { Link, useNavigate } from 'react-router-dom';
 import ManageSearchIcon from '@mui/icons-material/ManageSearch';
 import ShoppingCartIcon from '@mui/icons-material/ShoppingCart';
 import MenuIcon from '@mui/icons-material/Menu';
-import CloseIcon from '@mui/icons-material/Close';
 import ExpandMore from '@mui/icons-material/ExpandMore';
 import ExpandLess from '@mui/icons-material/ExpandLess';
-import InboxIcon from '@mui/icons-material/MoveToInbox';
-import MailIcon from '@mui/icons-material/Mail';
 import { logOut, resetState } from '../redux/authSlice';
-import {resetStateCart} from '../redux/cartSlice'
 import { useDispatch, useSelector } from 'react-redux';
-import { logoutUser } from '../redux/apiCalls';
 import { itemTables } from '../dataTables';
+import avatarImage from '../assets/avatar.png'
 import { toast } from 'react-toastify';
 import HomeIcon from '@mui/icons-material/Home';
 import DashboardIcon from '@mui/icons-material/Dashboard';
@@ -290,7 +286,7 @@ const Navbar = () => {
                         }}
                         onClick={handleClickListItem}
                         >
-                        Categories  
+                        Department  
                         </Typography>
                         {open ? <ExpandLess /> : <ExpandMore />}
 
@@ -360,7 +356,7 @@ const Navbar = () => {
                         <IconButton 
                             onClick={handleOpenUserMenu}
                             sx={{ p: 0 }}>
-                            <Avatar alt="Remy Sharp" src={currentUser.img} />
+                            <Avatar alt="Remy Sharp" src={currentUser.img || avatarImage } />
                         </IconButton>
                         </Tooltip>
                         <Menu

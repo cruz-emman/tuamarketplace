@@ -21,7 +21,10 @@ import {
 } from 'firebase/storage'
 const USER_REGEX = /^[A-z][A-z0-9-_]{3,23}$/;
 const PWD_REGEX = /^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#$%]).{8,24}$/;
-const ID_REGEX = /^[0-9]{10}$/;
+const ID_REGEX = /^[0-9]{10}\d*\.?\d*$/;
+const CONTACT_REGEX = /^(09|\+639)\d{9}$/;
+
+
 
 
 
@@ -51,6 +54,7 @@ const EditProfile = () => {
         defaultValues.email = res.data?.email
         defaultValues.studentId = res.data?.studentId
         defaultValues.department = res.data?.department
+        defaultValues.contactNumber = res.data?.contactNumber
         defaultValues.img = res.data?.img
         defaultValues.password = res.data?.password
         reset({ ...defaultValues });
@@ -75,8 +79,8 @@ const EditProfile = () => {
 
 
   
-  const onSubmit =  async ({firstname, middlename, lastname, email, password, studentId, department}) => {
-    let user = {firstname, middlename, lastname, email, password, studentId, department}
+  const onSubmit =  async ({firstname, middlename, lastname, email, password, studentId, department,contactNumber}) => {
+    let user = {firstname, middlename, lastname, email, password, studentId, department,contactNumber}
     let userImage = itemName?.img
 
     const userend = {...user, img: userImage}
@@ -179,6 +183,16 @@ const EditProfile = () => {
                             {...register('studentId', {pattern: {value: ID_REGEX,  message: "Please Enter your Student ID properly" }})}
                             error={!!errors?.studentId}
                             helperText={errors?.studentId ? errors.studentId.message: null}
+                        />
+                        <TextField   
+                            variant="outlined"
+                            name="contactNumber"
+                            label="Contact No."
+                            fullWidth
+                            type="text"
+                            {...register('contactNumber', {pattern: {value: CONTACT_REGEX,  message: "Please Enter your Student ID properly" }})}
+                            error={!!errors?.contactNumber}
+                            helperText={errors?.contactNumber ? errors.contactNumber.message: null}
                         />
                           <FormControl fullWidth>
                             <InputLabel id="demo-simple-select-label">Department</InputLabel>

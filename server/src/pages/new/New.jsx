@@ -24,6 +24,7 @@ const New = ({ inputs, title }) => {
     const getUser = async () =>{
       try {
         const res = await userRequest.get(`/users/find/${userId}`)
+        console.log(res.data)
         setUserInfo(res.data)
         setLoading(false)
       } catch (error) {
@@ -36,7 +37,6 @@ const New = ({ inputs, title }) => {
 
   const handleClick = async (e) => {
     e.preventDefault() 
-    console.log(data)
     try {
        await userRequest.put(`/users/${userId}`,data)
        toast.success("Edit User Succesfully.")
@@ -69,8 +69,8 @@ const New = ({ inputs, title }) => {
           <div className="left">
             <img
               src={
-                file
-                ? URL.createObjectURL(file)
+                userInfo.img
+                ? userInfo.img
                 : "https://icon-library.com/images/no-image-icon/no-image-icon-0.jpg"
               }
               alt=""
@@ -111,6 +111,10 @@ const New = ({ inputs, title }) => {
                   <input type="text" value={userInfo.department}  readOnly />
                 </div>
                 <div className="formInput">
+                  <label>Contact No.</label>
+                  <input type="text" name="contactNumber" value={userInfo.contactNumber}   onChange={(e) => setData({...data, [e.target.name]: e.target.value})} />
+                </div>
+                <div className="formInput">
                   <label>Password</label>
                   <input type="text" name="password" onChange={(e) => setData({...data, [e.target.name]: e.target.value})}  />
                 </div>
@@ -139,8 +143,9 @@ const New = ({ inputs, title }) => {
                     </FormControl>
 
                 </div>
-              <button onClick={handleClick}>Update</button>
             </form>
+            <button onClick={handleClick}>Update</button>
+
           </div>
         </div>
       </div>

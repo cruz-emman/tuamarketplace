@@ -94,10 +94,12 @@ const Category = () => {
   useEffect(() =>{
 
     const getTopProductCategory = async ()  => {
-      const res = await publicRequest.get(`/order/topCategory`)
-      const topDept = res.data[0]
-      const getName = topDept?._id.toString()
-      setTopProductCategory(getName)
+      const res = await publicRequest.get(`/order/categories`)
+      const topCategory = res.data[0]?.category
+      setTopProductCategory(topCategory)
+
+
+      
       setLoading(false)
     } 
     getTopProductCategory()
